@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Criar_conta from './src/components/tela_login/create_account';
+import Criar_conta from './src/screens/tela_login/create_account';
 
 export default function App() {
   return (

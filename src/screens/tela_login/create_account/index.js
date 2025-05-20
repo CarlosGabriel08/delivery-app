@@ -17,7 +17,7 @@ export default function Criar_conta() {
 
         <ImageBackground
           style={style.imagem_fundo}
-          source={require("../../../image/food_fundo_tela.jpg")}
+          source={require("../../../assets/image")}
         />
 
       </View>
@@ -47,7 +47,7 @@ export default function Criar_conta() {
       <TouchableOpacity style={style.button_cadastrar_google}>
         <Image
           style={style.simbolo_google}
-          source={require("../../../image/simbolo-do-google.png")}
+          source={require("../../../assets/image/simbolo-do-google.png")}
         />
         <Text style={style.button_text_google}>Cadastrar com o Google</Text>
       </TouchableOpacity>
