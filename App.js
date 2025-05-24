@@ -1,3 +1,4 @@
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Criar_conta from "./src/components/tela_login/create_account";
@@ -16,3 +17,4 @@ export default function App() {
     </NavigationContainer>
   );
 }
+

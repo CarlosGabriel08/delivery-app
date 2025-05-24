@@ -5,7 +5,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+<<<<<<< HEAD
     "newArchEnabled": false,
+=======
+    "newArchEnabled": true,
+>>>>>>> 391e0baa516e9382b422d6e63bc15a86815f32a6
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
@@ -15,12 +19,20 @@
     },
     "android": {
       "adaptiveIcon": {
+<<<<<<< HEAD
+=======
+        "foregroundImage": "./assets/adaptive-icon.png",
+>>>>>>> 391e0baa516e9382b422d6e63bc15a86815f32a6
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
     },
     "web": {
+<<<<<<< HEAD
       
+=======
+      "favicon": "./assets/favicon.png"
+>>>>>>> 391e0baa516e9382b422d6e63bc15a86815f32a6
     }
   }
 }
