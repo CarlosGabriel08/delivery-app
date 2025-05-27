@@ -1,83 +1,87 @@
 import React from "react";
 import {
+  ScrollView,
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageBackground,
 } from "react-native";
 
 export default function Login({navigation}) {
   return (
-    <View>
-
-      <View style={style.View_fundo}>
-
-        <ImageBackground
-          style={style.imagem_fundo}
-          source={require("../../../image/Illustration.png")}
-        />
-
-      </View>
-
-
-      <TouchableOpacity style={style.button_criar_conta}  onPress={()=> navigation.navigate("Criar_conta")}>
-        <Text style={style.button_text_criar}>Criar Conta</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={style.button_login}>
-
-        <View>
-          <Text style={style.button_text_login}>Login</Text>
-          <View style={{width:50, height:3,backgroundColor:"#D61355", alignSelf:"center", marginTop:7, borderRadius:8}}></View>
-        </View>
-
-      </TouchableOpacity>
-
+    <ScrollView style={style.scroll_geral} showsVerticalScrollIndicator={false}>
       <View style={style.container}>
-        <Text style={style.email}>Email</Text>
-        <TextInput style={style.input} keyboardType="email-address"  placeholder="...@gmail.com" />
-        <Text style={style.senha}>Senha</Text>
-        <TextInput style={style.input} placeholder="senha" />
+        <View style={style.content}>
+          <ImageBackground
+            style={style.imagem_fundo}
+            source={require("../../../image/Illustration.png")}
+            resizeMode="cover"
+          />
+
+          <View style={style.header}>
+            <TouchableOpacity style={style.button_criar_conta} onPress={()=> navigation.navigate("Criar_conta")}>
+              <Text style={style.button_text_criar}>Criar Conta</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={style.button_login}>
+              <View>
+                <Text style={style.button_text_login}>Login</Text>
+                <View style={style.underline}></View>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={style.form}>
+            <Text style={style.label}>Email</Text>
+            <TextInput style={style.input} keyboardType="email-address" placeholder="Digite seu email" />
+            <Text style={style.label}>Senha</Text>
+            <TextInput style={style.input} placeholder="Digite sua senha" />
+          </View>
+
+          <TouchableOpacity style={style.button_entrar}>
+            <Text style={style.button_text_entrar}>Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      <TouchableOpacity style={style.button2_Log}>
-        <Text style={style.button2_text_Log}>Login</Text>
-      </TouchableOpacity>
-
-    </View>
+    </ScrollView>
   );
 }
 
 const style = StyleSheet.create({
-  view_geral:{
-    flex:1,
-    backgroundColor:"white",
+  scroll_geral: {
+    flex: 1,
+    backgroundColor: "white",
   },
-  View_fundo:{
-    width:"100%",
-    height:340,
-    backgroundColor:""
-    },
+
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+
+  content: {
+    width: "90%",
+    alignItems: "center",
+  },
+
   imagem_fundo: {
-    top:70,
     width: 300,
     height: 290,
-    bottom: 100,
-    alignSelf:"center",
+    marginTop: 70,
   },
+
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 20,
+  },
+
   button_criar_conta: {
-    top:30,
-    height: 50,
-    width: 150,
-    right: 25,
-    left:25,
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "transparent",
-    
   },
 
   button_text_criar: {
@@ -87,12 +91,7 @@ const style = StyleSheet.create({
   },
 
   button_login: {
-    width: 150,
-    height:50,
-    marginLeft:230,
     alignItems: "center",
-    backgroundColor: "transparent",
-    bottom:15,
   },
 
   button_text_login: {
@@ -101,50 +100,43 @@ const style = StyleSheet.create({
     color: "#D61355",
   },
 
-  container: {
-    width: 350,
-    height: 200,
-    right: 0,
-    left:17,
-    top:20,
-    gap:7,
+  underline: {
+    width: 50,
+    height: 3,
+    backgroundColor: "#D61355",
+    marginTop: 7,
+    borderRadius: 8,
   },
 
-  nome: {
+  form: {
+    width: "100%",
+    marginTop: 20,
+    gap: 7,
+  },
+
+  label: {
     fontSize: 15,
     fontWeight: "bold",
   },
 
   input: {
-    width:350,
-    borderRadius:3,
-    padding:7,
-    borderWidth:0.5
+    width: "100%",
+    borderRadius: 3,
+    padding: 7,
+    borderWidth: 0.5,
   },
 
-  email: {
-    fontSize: 15,
-    fontWeight: "bold",
-  },
-
-  senha: {
-    fontSize: 15,
-    fontWeight: "bold",
-  },
-
-  button2_Log: {
-    top: 70,
+  button_entrar: {
     width: 270,
     height: 50,
     backgroundColor: "#D61355",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 7,
-    alignSelf:"center",
-    
+    marginTop: 70,
   },
 
-  button2_text_Log: {
+  button_text_entrar: {
     fontSize: 17,
     fontWeight: "bold",
     color: "#F6F6F6",
