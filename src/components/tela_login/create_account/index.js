@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   View,
@@ -7,10 +7,78 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  Alert,
 } from "react-native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Criar_conta({navigation}) {
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+
+  const handleCadastro = async () => {
+    try {
+      if (!nome.trim()) {
+        Alert.alert('Erro', 'Por favor, digite seu nome completo');
+        return;
+      }
+
+      if (!email.trim()) {
+        Alert.alert('Erro', 'Por favor, digite seu email');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        Alert.alert('Erro', 'Por favor, digite um email válido');
+        return;
+      }
+
+      if (!senha.trim()) {
+        Alert.alert('Erro', 'Por favor, digite sua senha');
+        return;
+      }
+
+      if (senha.length < 6) {
+        Alert.alert('Erro', 'A senha deve ter pelo menos 6 caracteres');
+        return;
+      }
+
+      const usuarios = await AsyncStorage.getItem('usuarios');
+      const usuariosArray = usuarios ? JSON.parse(usuarios) : [];
+      
+      const emailExistente = usuariosArray.find(user => user.email === email);
+      if (emailExistente) {
+        Alert.alert('Erro', 'Este email já está cadastrado');
+        return;
+      }
+
+      const novoUsuario = {
+        nome: nome.trim(),
+        email: email.trim(),
+        senha: senha.trim(),
+      };
+
+      usuariosArray.push(novoUsuario);
+
+      await AsyncStorage.setItem('usuarios', JSON.stringify(usuariosArray));
+
+      Alert.alert(
+        'Sucesso', 
+        'Conta criada com sucesso!',
+        [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('Login')
+          }
+        ]
+      );
+    } catch (error) {
+      Alert.alert('Erro', 'Ocorreu um erro ao criar a conta');
+      console.error(error);
+    }
+  };
+
   return (
     <ScrollView style={style.scroll_geral} showsVerticalScrollIndicator={false}>
       <View style={style.container}>
@@ -36,14 +104,36 @@ export default function Criar_conta({navigation}) {
 
           <View style={style.form}>
             <Text style={style.label}>Nome completo</Text>
-            <TextInput style={style.input} placeholder="Digite seu nome completo" />
+            <TextInput 
+              style={style.input} 
+              placeholder="Digite seu nome completo"
+              value={nome}
+              onChangeText={setNome}
+              autoCapitalize="words"
+            />
             <Text style={style.label}>Email</Text>
-            <TextInput style={style.input} keyboardType="email-address" placeholder="Digite seu email" />
+            <TextInput 
+              style={style.input} 
+              keyboardType="email-address" 
+              placeholder="Digite seu email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+            />
             <Text style={style.label}>Senha</Text>
-            <TextInput style={style.input} placeholder="Digite sua senha" />
+            <TextInput 
+              style={style.input} 
+              placeholder="Digite sua senha"
+              value={senha}
+              onChangeText={setSenha}
+              secureTextEntry
+            />
           </View>
 
-          <TouchableOpacity style={style.button_cadastrar}>
+          <TouchableOpacity 
+            style={style.button_cadastrar}
+            onPress={handleCadastro}
+          >
             <Text style={style.button_text_cada}>Cadastrar</Text>
           </TouchableOpacity>
         </View>
@@ -127,6 +217,7 @@ const style = StyleSheet.create({
     borderRadius: 3,
     padding: 7,
     borderWidth: 0.5,
+    borderColor: "rgba(0, 0, 0, 0.1)",
   },
 
   button_cadastrar: {

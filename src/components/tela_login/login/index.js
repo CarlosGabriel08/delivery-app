@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   View,
@@ -7,9 +7,55 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  Alert,
 } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({navigation}) {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      if (!email.trim()) {
+        Alert.alert('Erro', 'Por favor, digite seu email');
+        return;
+      }
+
+      if (!senha.trim()) {
+        Alert.alert('Erro', 'Por favor, digite sua senha');
+        return;
+      }
+
+      const usuarios = await AsyncStorage.getItem('usuarios');
+      const usuariosArray = usuarios ? JSON.parse(usuarios) : [];
+
+      const usuario = usuariosArray.find(
+        user => user.email === email.trim() && user.senha === senha.trim()
+      );
+
+      if (usuario) {
+        await AsyncStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+        
+        Alert.alert(
+          'Sucesso',
+          'Login realizado com sucesso!',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('Tela_principal')
+            }
+          ]
+        );
+      } else {
+        Alert.alert('Erro', 'Email ou senha incorretos');
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Ocorreu um erro ao fazer login');
+      console.error(error);
+    }
+  };
+
   return (
     <ScrollView style={style.scroll_geral} showsVerticalScrollIndicator={false}>
       <View style={style.container}>
@@ -35,12 +81,28 @@ export default function Login({navigation}) {
 
           <View style={style.form}>
             <Text style={style.label}>Email</Text>
-            <TextInput style={style.input} keyboardType="email-address" placeholder="Digite seu email" />
+            <TextInput 
+              style={style.input} 
+              keyboardType="email-address" 
+              placeholder="Digite seu email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+            />
             <Text style={style.label}>Senha</Text>
-            <TextInput style={style.input} placeholder="Digite sua senha" />
+            <TextInput 
+              style={style.input} 
+              placeholder="Digite sua senha"
+              value={senha}
+              onChangeText={setSenha}
+              secureTextEntry
+            />
           </View>
 
-          <TouchableOpacity style={style.button_entrar}>
+          <TouchableOpacity 
+            style={style.button_entrar}
+            onPress={handleLogin}
+          >
             <Text style={style.button_text_entrar}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -101,7 +163,7 @@ const style = StyleSheet.create({
   },
 
   underline: {
-    width: 50,
+    width: 90,
     height: 3,
     backgroundColor: "#D61355",
     marginTop: 7,
@@ -124,6 +186,7 @@ const style = StyleSheet.create({
     borderRadius: 3,
     padding: 7,
     borderWidth: 0.5,
+    borderColor: "rgba(0, 0, 0, 0.1)",
   },
 
   button_entrar: {
