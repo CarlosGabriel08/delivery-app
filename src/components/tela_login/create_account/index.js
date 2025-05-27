@@ -9,7 +9,6 @@ import {
   ImageBackground,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
 
 export default function Criar_conta({navigation}) {
   return (
