@@ -1,9 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, Image, ScrollView, TouchableOpacity, FlatList} from 'react-native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
-import FoodCard from '../card_comida';
-import { ImageBackground } from 'react-native';
-import Tela_carrinho from '../tela_carrinho';
 import CartButton from '../CartButton';
 import FoodCardHorizontal from '../FoodCardHorizontal';
 
@@ -47,18 +44,18 @@ export default function Tela_principal ({navigation}){
   return (
     <View style={{ flex: 1 }}>
     <ScrollView style={{ flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 }}>
-      {/* Location and profile */}
+      {/* Localização e perfil */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 40 }}>
         <Image source={{ uri: 'https://i.pravatar.cc/50' }} style={{ width: 35, height: 35, borderRadius: 20 }} />
       </View>
 
-      {/* Search bar */}
+      {/* Barra de pesquisa */}
       <View style={{ marginVertical: 20, backgroundColor: '#f2f2f2', borderRadius: 10, padding: 10, flexDirection: 'row', alignItems: 'center' }}>
         <Ionicons name="search" size={20} color="#aaa" />
-        <TextInput placeholder="Search" style={{ marginLeft: 10, flex: 1 }} />
+        <TextInput placeholder="Pesquisar" style={{ marginLeft: 10, flex: 1 }} />
       </View>
 
-      {/* Promo banner */}
+      {/* Banner promocional */}
       <TouchableOpacity onPress={()=> navigation.navigate("Pedidos",{
         item :{
           id: '2',
@@ -74,16 +71,16 @@ export default function Tela_principal ({navigation}){
         style={{ width: '100%', height: 150, borderRadius: 15, marginBottom: 20}} />
       </TouchableOpacity>
 
-      {/* Category tabs */}
+      {/* Abas de categoria */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20 }}>
-        {['Burger', 'Pizza'].map((item, index) => (
-          <TouchableOpacity key={index} style={{ paddingVertical: 6, paddingHorizontal: 14, backgroundColor: item === 'Burger' ? '#F24C6A' : '#f2f2f2', borderRadius: 20 }}>
-            <Text style={{ color: item === 'Burger' ? '#fff' : '#000' }}>{item}</Text>
+        {['Hambúrguer', 'Pizza'].map((item, index) => (
+          <TouchableOpacity key={index} style={{ paddingVertical: 6, paddingHorizontal: 14, backgroundColor: item === 'Hambúrguer' ? '#F24C6A' : '#f2f2f2', borderRadius: 20 }}>
+            <Text style={{ color: item === 'Hambúrguer' ? '#fff' : '#000' }}>{item}</Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* Food cards */}
+      {/* Cards de comida */}
       <FlatList
         data={produtos}
         horizontal
@@ -98,31 +95,27 @@ export default function Tela_principal ({navigation}){
         )}
       />
 
-      {/* Popular section */}
+      {/* Seção popular */}
       <View style={{ marginTop: 30, marginBottom: 20, }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Popular Meal Menu</Text>
-          <Text style={{ color: '#F24C6A' }}>See All</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Cardápio Popular</Text>
+          <Text style={{ color: '#F24C6A' }}>Ver Todos</Text>
         </View>
 
-        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15, }} onPress={()=> navigation.navigate("Pedidos", {
-          item:{
-          id: '1',
-          name: 'Hambúrguer Clássico',
-          desc: 'Hambúrguer artesanal com queijo derretido e alface fresca',
-          price: '20.00',
-          rating: 4.5,
-          Image: 'https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          } 
-        }
-        )}>
-          <Image source={{ uri: 'https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }} style={{ width: 70, height: 70, borderRadius: 10 }} />
-          <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontWeight: 'bold' }}>Hambúrguer Clássico</Text>
-            <Text style={{ color: '#999', fontSize: 12 }}>Hambúrguer artesanal com queijo derretido e alface fresca</Text>
-          </View>
-          <Text style={{ fontWeight: 'bold', color: '#F24C6A', marginLeft: 'auto' }}>R$20</Text>
-        </TouchableOpacity>
+        {produtos.map((item) => (
+          <TouchableOpacity 
+            key={item.id}
+            style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }} 
+            onPress={() => navigation.navigate("Pedidos", { item })}
+          >
+            <Image source={{ uri: item.Image }} style={{ width: 70, height: 70, borderRadius: 10 }} />
+            <View style={{ marginLeft: 15 }}>
+              <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+              <Text style={{ color: '#999', fontSize: 12 }}>{item.desc}</Text>
+            </View>
+            <Text style={{ fontWeight: 'bold', color: '#F24C6A', marginLeft: 'auto' }}>R${item.price}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </ScrollView>
 
