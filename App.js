@@ -10,8 +10,10 @@ import Tela_carrinho from "./src/components/tela_carrinho";
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} >
-        
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Tela_abertura">
+        <Stack.Screen name="Tela_abertura" component={Tela_abertura} />
+        <Stack.Screen name="Criar_conta" component={Criar_conta} />
+        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Tela_principal" component={Tela_principal} />
         <Stack.Screen name="Pedidos" component={Pedidos}/>
         <Stack.Screen name="Tela_carrinho" component={Tela_carrinho}/>
