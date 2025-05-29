@@ -3,8 +3,6 @@ import { View, Text, TextInput, Image, ScrollView, TouchableOpacity, FlatList} f
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import FoodCard from '../card_comida';
 
-
-
 export default function Tela_principal ({navigation}){
 
   const produtos = [
