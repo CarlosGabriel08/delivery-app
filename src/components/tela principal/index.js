@@ -4,29 +4,45 @@ import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import FoodCard from '../card_comida';
 import { ImageBackground } from 'react-native';
 import Tela_carrinho from '../tela_carrinho';
+import CartButton from '../CartButton';
+import FoodCardHorizontal from '../FoodCardHorizontal';
+
 export default function Tela_principal ({navigation}){
 
   const produtos = [
-  {
-    id: '1',
-    name: 'Chicken burger',
-    desc: '100 gr chicken + tomato + lettuce + cheese',
-    price: '15.00',
-    rating: 4.2,
-    Image: 'https://cloudfront-us-east-1.images.arcpublishing.com/estadao/77XTHHCCLBEXLC2Y5RK4PN37CE.jpg',
-  },
-  {
-    id: '2',
-    name: 'Cheese burger',
-    desc: '100 gr meat + cheese + tomato + lettuce',
-    price: '20.00',
-    rating: 4.5,
-    Image: 'https://blog.biglar.com.br/wp-content/uploads/2024/08/iStock-1398630614.jpg',
-  },
-];
-
-
-
+    {
+      id: '1',
+      name: 'Hambúrguer Clássico',
+      desc: 'Hambúrguer artesanal com queijo derretido e alface fresca',
+      price: '35.90',
+      rating: 4.5,
+      Image: 'https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+    },
+    {
+      id: '2',
+      name: 'Triplo X-Burger',
+      desc: 'Hambúrguer premium com 3 carnes suculentas, queijo cheddar derretido, alface crocante e tomate fresco',
+      price: '49.90',
+      rating: 4.2,
+      Image: 'https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg'
+    },
+    {
+      id: '3',
+      name: 'Hambúrguer Clássicão',
+      desc: 'Hambúrguer com carne, queijo cheddar, bacon, alface e tomate',
+      price: '42.90',
+      rating: 4.0,
+      Image: 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg'
+    },
+    {
+      id: '4',
+      name: 'Hambúrguer de Frango Duplo',
+      desc: 'Dois hambúrgueres de frango grelhado, queijo especial e molho barbecue',
+      price: '39.90',
+      rating: 4.8,
+      Image: 'https://images.pexels.com/photos/1633525/pexels-photo-1633525.jpeg'
+    }
+  ];
 
   return (
     <View style={{ flex: 1 }}>
@@ -43,25 +59,20 @@ export default function Tela_principal ({navigation}){
       </View>
 
       {/* Promo banner */}
-
       <TouchableOpacity onPress={()=> navigation.navigate("Pedidos",{
         item :{
           id: '2',
-          name: 'Cheese burger',
-          desc: '100 gr meat + cheese + tomato + lettuce',
-          price: '15.00',
-          rating: 4.5,
-          Image: 'https://blog.biglar.com.br/wp-content/uploads/2024/08/iStock-1398630614.jpg',
+          name: 'Triplo X-Burger',
+          desc: 'Hambúrguer premium com 3 carnes suculentas, queijo cheddar derretido, alface crocante e tomate fresco',
+          price: '32.90',
+          rating: 4.2,
+          Image: '../../image/ofertaespecial.png',
           } 
         }
       )}>
-      <Image source={{ uri: 'https://blog.biglar.com.br/wp-content/uploads/2024/08/iStock-1398630614.jpg' }}
+      <Image source={require('../../image/ofertaespecial.png')}
         style={{ width: '100%', height: 150, borderRadius: 15, marginBottom: 20}} />
       </TouchableOpacity>
-
-      <Image source={require('../../image/ofertaespecial.png')}
-        style={{ width: '100%', height: 150, borderRadius: 15, marginBottom: 20,backgroundColor:"red"}} />
-
 
       {/* Category tabs */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20 }}>
@@ -73,7 +84,6 @@ export default function Tela_principal ({navigation}){
       </View>
 
       {/* Food cards */}
-
       <FlatList
         data={produtos}
         horizontal
@@ -81,73 +91,12 @@ export default function Tela_principal ({navigation}){
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 10 }}
         renderItem={({ item }) => (
-          <View style={{ backgroundColor: '#f9f9f9', borderRadius: 15, padding: 15, marginRight: 15, width: 180 }}>
-            <TouchableOpacity onPress={() => navigation.navigate("Pedidos", { item })}>
-              <Image source={{ uri: item.Image }} style={{ width: '100%', height: 100, borderRadius: 10 }} />
-            </TouchableOpacity>
-            <Text style={{ fontWeight: 'bold', marginTop: 10 }}>{item.name}</Text>
-            <Text style={{ fontSize: 12, color: '#555', marginVertical: 4 }}>{item.desc}</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontWeight: 'bold', color: '#F24C6A' }}>$ {item.price}</Text>
-              <Text style={{ fontSize: 12 }}>⭐ {item.rating}</Text>
-            </View>
-          </View>
+          <FoodCardHorizontal 
+            item={item} 
+            onPress={() => navigation.navigate("Pedidos", { item })}
+          />
         )}
       />
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {[
-          {
-            name: 'Hambúrguer Clássico',
-            desc: 'Hambúrguer artesanal com queijo derretido e alface fresca',
-            price: '20.00',
-            rating: 4.5,
-            image: 'https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-          },
-          {
-            name: 'Triplo X-Burger',
-            desc: 'Hambúrguer premium com 3 carnes suculentas, queijo cheddar derretido, alface crocante e tomate fresco',
-            price: '32.90',
-            rating: 4.2,
-            image: 'https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg'
-          },
-          {
-            name: 'Hambúrguer Clássicão',
-            desc: 'Hambúrguer com carne, queijo cheddar, bacon, alface e tomate',
-            price: '27.00',
-            rating: 4.0,
-            image: 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg'
-          },
-          {
-            name: 'Hambúrguer de Frango Duplo',
-            desc: 'Dois hambúrgueres de frango grelhado, queijo especial e molho barbecue',
-            price: '25.00',
-            rating: 4.8,
-            image: 'https://images.pexels.com/photos/1633525/pexels-photo-1633525.jpeg'
-          }
-        ].map((item, index) => (
-          <TouchableOpacity 
-            key={index}
-            onPress={() => navigation.navigate('Pedido', { 
-              nome: item.name,
-              descricao: item.desc,
-              preco: item.price,
-              avaliacao: item.rating,
-              imagem: item.image
-            })}
-          >
-            <FoodCard
-              name={item.name}
-              desc={item.desc}
-              price={item.price}
-              rating={item.rating}
-              image={item.image}
-              style={{ marginRight: 15, width: 180 }}
-            />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
 
       {/* Popular section */}
       <View style={{ marginTop: 30, marginBottom: 20, }}>
@@ -159,31 +108,25 @@ export default function Tela_principal ({navigation}){
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15, }} onPress={()=> navigation.navigate("Pedidos", {
           item:{
           id: '1',
-          name: 'Chicken burger',
-          desc: '100 gr chicken + tomato + lettuce + cheese',
-          price: '15.00',
-          rating: 4.2,
-          Image: 'https://cloudfront-us-east-1.images.arcpublishing.com/estadao/77XTHHCCLBEXLC2Y5RK4PN37CE.jpg',
+          name: 'Hambúrguer Clássico',
+          desc: 'Hambúrguer artesanal com queijo derretido e alface fresca',
+          price: '20.00',
+          rating: 4.5,
+          Image: 'https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
           } 
         }
         )}>
-          <Image source={{ uri: 'https://cloudfront-us-east-1.images.arcpublishing.com/estadao/77XTHHCCLBEXLC2Y5RK4PN37CE.jpg' }} style={{ width: 70, height: 70, borderRadius: 10 }} />
+          <Image source={{ uri: 'https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }} style={{ width: 70, height: 70, borderRadius: 10 }} />
           <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontWeight: 'bold' }}>Chicken Burguer</Text>
-            <Text style={{ color: '#999', fontSize: 12 }}>100 gr meat + cheese + tomato + lettuce</Text>
+            <Text style={{ fontWeight: 'bold' }}>Hambúrguer Clássico</Text>
+            <Text style={{ color: '#999', fontSize: 12 }}>Hambúrguer artesanal com queijo derretido e alface fresca</Text>
           </View>
-          <Text style={{ fontWeight: 'bold', color: '#F24C6A', marginLeft: 'auto' }}>$15</Text>
+          <Text style={{ fontWeight: 'bold', color: '#F24C6A', marginLeft: 'auto' }}>R$20</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
 
-     {/* Bottom Cart */}
-
-      <TouchableOpacity style={{position:'absolute',width:70, height:70, backgroundColor:"rgba(220,20,60,0.9)", left:290, bottom:70, borderRadius:50, alignItems:"center", justifyContent:"center"}}  onPress={()=> navigation.navigate("Tela_carrinho")}>
-        <ImageBackground source={require('../../image/cart.png')} style={{width:47, height:47}}>
-
-        </ImageBackground>
-      </TouchableOpacity>
+    <CartButton onPress={() => navigation.navigate("Tela_carrinho")} />
     </View>
   );
 };

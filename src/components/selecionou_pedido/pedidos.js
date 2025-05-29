@@ -1,28 +1,48 @@
 import React from "react";
 import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Pedidos({ navigation, route }) {
   const { item } = route.params;
 
-  return (
-    <View style={{ flex: 1 }}>
-      {/* Imagem do produto */}
-      <View style={{ flex: 1 }}>
-        <Image style={style.imagem} source={{ uri: item.Image }} />
+  const adicionarAoCarrinho = async () => {
+    try {
+      // Busca itens existentes no carrinho
+      const carrinhoAtual = await AsyncStorage.getItem('carrinho');
+      const itensCarrinho = carrinhoAtual ? JSON.parse(carrinhoAtual) : [];
+      
+      // Verifica se o item já existe no carrinho
+      const itemExistente = itensCarrinho.find(i => i.id === item.id);
+      
+      if (itemExistente) {
+        // Se existir, incrementa a quantidade
+        itemExistente.quantidade += 1;
+      } else {
+        // Se não existir, adiciona novo item
+        itensCarrinho.push({
+          ...item,
+          quantidade: 1,
+          price: item.price
+        });
+      }
+      
+      // Salva o carrinho atualizado
+      await AsyncStorage.setItem('carrinho', JSON.stringify(itensCarrinho));
+      alert('Item adicionado ao carrinho!');
+    } catch (error) {
+      console.error('Erro ao adicionar ao carrinho:', error);
+      alert('Erro ao adicionar ao carrinho');
+    }
+  };
 
+  return (
+    <View style={styles.container}>
+      {/* Imagem do produto */}
+      <View style={styles.imageContainer}>
+        <Image style={styles.imagem} source={{ uri: item.Image }} />
         <TouchableOpacity
-          style={{
-            position: "absolute",
-            top: 70,
-            left: 20,
-            width: 50,
-            height: 50,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 30,
-            backgroundColor: "rgba(0, 0, 0, 0.3)",
-          }}
+          style={styles.backButton}
           onPress={() => navigation.navigate("Tela_principal")}
         >
           <Ionicons name="arrow-back" size={32} color={"white"} />
@@ -30,99 +50,121 @@ export default function Pedidos({ navigation, route }) {
       </View>
 
       {/* Conteúdo abaixo da imagem */}
-      <View style={{ flex: 1.3, backgroundColor: "#FFFFFF" }}>
-        <View
-          style={{
-            width: 100,
-            height: 30,
-            backgroundColor: "#FFCBCB",
-            marginTop: 30,
-            marginLeft: 30,
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: 10,
-          }}
-        >
-          <Text style={style.text_popular}>Popular</Text>
+      <View style={styles.contentContainer}>
+        <View style={styles.popularTag}>
+          <Text style={styles.popularText}>Popular</Text>
         </View>
 
-        <Text style={style.text_titulo}>{item.name}</Text>
+        <Text style={styles.title}>{item.name}</Text>
 
-        <View
-          style={{
-            height: "100%",
-            marginTop: 100,
-            gap: 30,
-          }}
-        >
-          {/* Estrelas e avaliação */}
-          <View
-            style={{
-              flexDirection: "row",
-              marginLeft: 30,
-              marginTop: -20,
-              alignItems: "center",
-            }}
-          >
-            {Array.from({ length: Math.floor(item.rating) }).map((_, i) => (
-              <Ionicons key={i} name="star" size={20} color="yellow" />
-            ))}
-            {item.rating % 1 !== 0 && (
-              <Ionicons name="star-half" size={20} color="yellow" />
-            )}
-            <Text style={{ marginLeft: 10 }}>{item.rating}</Text>
-          </View>
-
-          {/* Descrição do item */}
-          <Text style={style.text_descriçao}>{item.desc}</Text>
+        <View style={styles.ratingContainer}>
+          {Array.from({ length: Math.floor(item.rating) }).map((_, i) => (
+            <Ionicons key={i} name="star" size={20} color="#FFD700" />
+          ))}
+          {item.rating % 1 !== 0 && (
+            <Ionicons name="star-half" size={20} color="#FFD700" />
+          )}
+          <Text style={styles.ratingText}>{item.rating}</Text>
         </View>
+
+        <Text style={styles.description}>{item.desc}</Text>
+
+        <TouchableOpacity style={styles.button} onPress={adicionarAoCarrinho}>
+          <Text style={styles.buttonText}>Adicionar ao carrinho</Text>
+        </TouchableOpacity>
       </View>
-
-      {/* Botão adicionar ao carrinho */}
-      <TouchableOpacity style={style.button}>
-        <Text style={{ color: "white", fontWeight: "bold" }}>
-          adicionar ao carrinho
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  imageContainer: {
+    flex: 1,
+    position: 'relative',
+  },
   imagem: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
-
-  text_popular: {
-    color: "#D61355",
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    width: 45,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-
-  text_titulo: {
-    fontWeight: "bold",
-    position: "absolute",
-    left: 30,
-    bottom: 370,
-    fontSize: 27,
+  contentContainer: {
+    flex: 1.3,
+    padding: 24,
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    marginTop: -30,
   },
-
-  text_descriçao: {
-    marginLeft: 30,
-    fontSize: 14,
-    color: "#555",
-    marginRight: 30,
-    textAlign: "justify",
+  popularTag: {
+    width: 100,
+    height: 30,
+    backgroundColor: '#FFE5E5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    marginBottom: 16,
   },
-
+  popularText: {
+    color: '#D61355',
+    fontWeight: '600',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#333',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  ratingText: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: '#666',
+  },
+  description: {
+    fontSize: 16,
+    color: '#666',
+    lineHeight: 24,
+    marginBottom: 30,
+  },
   button: {
-    position: "absolute",
-    bottom: 70,
-    alignSelf: "center",
-    backgroundColor: "#D61355",
-    width: "80%",
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
+    backgroundColor: '#D61355',
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 'auto',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textTransform: 'capitalize',
   },
 });

@@ -1,32 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-const cartItems = [
-  {
-      id: '1',
-      name: 'Chicken burger',
-      desc: '100 gr chicken + tomato + lettuce + cheese',
-      preço: 15.00,
-      rating: 4.2,
-      Image: 'https://cloudfront-us-east-1.images.arcpublishing.com/estadao/77XTHHCCLBEXLC2Y5RK4PN37CE.jpg',
-      quantidade: 1
-    },
-    {
-      id: '2',
-      name: 'Cheese burger',
-      desc: '100 gr meat + cheese + tomato + lettuce',
-      preço: 20.00,
-      rating: 4.5,
-      Image: 'https://blog.biglar.com.br/wp-content/uploads/2024/08/iStock-1398630614.jpg',
-      quantidade: 2
-    },
-  ];
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Tela_carrinho({navigation}) {
-  const subTotal = cartItems.reduce((acc, item) => acc + item.preço * item.quantidade, 0);
-  const delivery = 10;
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    carregarCarrinho();
+  }, []);
+
+  const carregarCarrinho = async () => {
+    try {
+      const carrinho = await AsyncStorage.getItem('carrinho');
+      if (carrinho) {
+        setCartItems(JSON.parse(carrinho));
+      }
+    } catch (error) {
+      console.error('Erro ao carregar carrinho:', error);
+    }
+  };
+
+  const atualizarQuantidade = async (itemId, incremento) => {
+    try {
+      const novosItens = cartItems.map(item => {
+        if (item.id === itemId) {
+          const novaQuantidade = item.quantidade + incremento;
+          if (novaQuantidade > 0) {
+            return { ...item, quantidade: novaQuantidade };
+          }
+          return null;
+        }
+        return item;
+      }).filter(Boolean);
+
+      setCartItems(novosItens);
+      await AsyncStorage.setItem('carrinho', JSON.stringify(novosItens));
+    } catch (error) {
+      console.error('Erro ao atualizar quantidade:', error);
+    }
+  };
+
+  const subTotal = cartItems.reduce((acc, item) => acc + parseFloat(item.price) * item.quantidade, 0);
+  const delivery = 15;
   const discount = 10;
-  const total = subTotal + delivery - discount;
+  const total = (subTotal + delivery - discount).toFixed(2);
 
   return (
     <View style={styles.container}>
@@ -43,15 +61,21 @@ export default function Tela_carrinho({navigation}) {
             <Image source={{ uri: item.Image}} style={styles.itemImage} />
             <View style={styles.itemInfo}>
               <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemRestaurant}>{item.restaurant}</Text>
-              <Text style={styles.itempreço}>${item.preço}</Text>
+              <Text style={styles.itemDesc}>{item.desc}</Text>
+              <Text style={styles.itemPrice}>R$ {item.price}</Text>
             </View>
             <View style={styles.quantityContainer}>
-              <TouchableOpacity style={styles.quantityButton}>
+              <TouchableOpacity 
+                style={styles.quantityButton}
+                onPress={() => atualizarQuantidade(item.id, -1)}
+              >
                 <Text style={styles.quantityButtonText}>-</Text>
               </TouchableOpacity>
-              <Text style={styles.quantityText}>{item.quantity}</Text>
-              <TouchableOpacity style={[styles.quantityButton, { backgroundColor: '#f43f5e' }]}>
+              <Text style={styles.quantityText}>{item.quantidade}</Text>
+              <TouchableOpacity 
+                style={[styles.quantityButton, { backgroundColor: '#f43f5e' }]}
+                onPress={() => atualizarQuantidade(item.id, 1)}
+              >
                 <Text style={[styles.quantityButtonText, { color: '#fff' }]}>+</Text>
               </TouchableOpacity>
             </View>
@@ -62,19 +86,19 @@ export default function Tela_carrinho({navigation}) {
       <View style={styles.summaryContainer}>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Sub-Total</Text>
-          <Text style={styles.summaryLabel}>${subTotal}</Text>
+          <Text style={styles.summaryLabel}>R$ {subTotal.toFixed(2)}</Text>
         </View>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Taxa de entrega</Text>
-          <Text style={styles.summaryLabel}>${delivery}</Text>
+          <Text style={styles.summaryLabel}>R$ {delivery.toFixed(2)}</Text>
         </View>
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>disconto</Text>
-          <Text style={styles.summaryLabel}>${discount}</Text>
+          <Text style={styles.summaryLabel}>Desconto</Text>
+          <Text style={styles.summaryLabel}>R$ {discount.toFixed(2)}</Text>
         </View>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryTotal}>Total</Text>
-          <Text style={styles.summaryTotal}>${total}</Text>
+          <Text style={styles.summaryTotal}>R$ {total}</Text>
         </View>
       </View>
 
@@ -129,7 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  itemRestaurant: {
+  itemDesc: {
     fontSize: 13,
     color: '#888',
   },
