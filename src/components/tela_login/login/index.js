@@ -113,7 +113,6 @@ export default function Login({navigation}) {
 
 const style = StyleSheet.create({
   scroll_geral: {
-    flex: 1,
     backgroundColor: "white",
   },
 

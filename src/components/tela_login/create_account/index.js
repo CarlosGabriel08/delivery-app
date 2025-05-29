@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   ImageBackground,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -80,7 +82,9 @@ export default function Criar_conta({navigation}) {
   };
 
   return (
-    <ScrollView style={style.scroll_geral} showsVerticalScrollIndicator={false}>
+    <KeyboardAvoidingView style={{flex:1}} behavior={Platform.OS ===  'android' ? 'padding' : 'height'}>
+    <ScrollView style={style.scroll_geral} contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }} showsVerticalScrollIndicator={false}>
+
       <View style={style.container}>
         <View style={style.content}>
           <ImageBackground
@@ -139,12 +143,12 @@ export default function Criar_conta({navigation}) {
         </View>
       </View>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const style = StyleSheet.create({
   scroll_geral: {
-    flex: 1,
     backgroundColor: "white",
   },
 
