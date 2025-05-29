@@ -174,62 +174,6 @@ export default function Tela_principal ({navigation}){
           </View>
           <Text style={{ fontWeight: 'bold', color: '#F24C6A', marginLeft: 'auto' }}>$15</Text>
         </TouchableOpacity>
-
-
-          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Hambúrgueres Populares</Text>
-          <Text style={{ color: '#F24C6A' }}>Ver Todos</Text>
-        </View>
-        {(() => {
-          const popularBurgers = [
-            {
-              name: 'Hambúrguer Clássico',
-              desc: 'Hambúrguer artesanal com queijo derretido e alface fresca',
-              price: '20.00',
-              rating: 4.5,
-              image: 'https://images.pexels.com/photos/3738730/pexels-photo-3738730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-            },
-            {
-              name: 'Triplo X-Burger',
-              desc: 'Hambúrguer premium com 3 carnes suculentas, queijo cheddar derretido, alface crocante e tomate fresco',
-              price: '32.90',
-              rating: 4.2,
-              image: 'https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg'
-            },
-            {
-              name: 'Hambúrguer Clássicão',
-              desc: 'Hambúrguer com carne, queijo cheddar, bacon, alface e tomate',
-              price: '27.00',
-              rating: 4.0,
-              image: 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg'
-            },
-            {
-              name: 'Hambúrguer de Frango Duplo',
-              desc: 'Dois hambúrgueres de frango grelhado, queijo especial e molho barbecue',
-              price: '25.00',
-              rating: 4.8,
-              image: 'https://images.pexels.com/photos/1633525/pexels-photo-1633525.jpeg'
-            }
-          ];
-
-          return popularBurgers
-            .sort((a, b) => b.rating - a.rating)
-            .slice(0, 3)
-            .map((item, index) => (
-              <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
-                <Image source={{ uri: item.image }} style={{ width: 70, height: 70, borderRadius: 10 }} />
-                <View style={{ marginLeft: 15, flex: 1 }}>
-                  <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-                  <Text style={{ color: '#999', fontSize: 12 }}>{item.desc}</Text>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
-                    <FontAwesome name="star" size={12} color="#FFD700" />
-                    <Text style={{ marginLeft: 4, fontSize: 12 }}>{item.rating}</Text>
-                  </View>
-                </View>
-                <Text style={{ fontWeight: 'bold', color: '#F24C6A' }}>R${item.price}</Text>
-              </View>
-            ));
-        })()}
-
       </View>
     </ScrollView>
   );
