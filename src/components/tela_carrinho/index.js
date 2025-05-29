@@ -102,7 +102,7 @@ export default function Tela_carrinho({navigation}) {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.orderButton}>
+      <TouchableOpacity style={styles.orderButton} onPress={()=> navigation.navigate("Pedido_feito")}>
         <Text style={styles.orderButtonText}>Faça meu Pedido</Text>
       </TouchableOpacity>
     </View>
